@@ -51,13 +51,13 @@ describe('API endpoint /get', function() {
 });
 
 
-describe('API endpoint /put', function() {
+describe('API endpoint /set', function() {
   this.timeout(2000);
 
   // POST - test set
-  it('should put a value to key "testkey"', function() {
+  it('should set a value to key "testkey"', function() {
     return chai.request(url)
-      .post('/put/testkey')
+      .post('/set/testkey')
       .set('Authorization', 'Basic '+(Buffer.from(user.username+':'+user.password).toString('base64')))
       .send({value: 'testValue'})
       .then(function(res) {
@@ -72,7 +72,7 @@ describe('API endpoint /put', function() {
   let u = uuid.v4()
 
   // POST - test set
-  it('should put a random value to key "testkey2"', function() {
+  it('should set a random value to key "testkey2"', function() {
     return chai.request(url)
       .post('/set/testkey2')
       .set('Authorization', 'Basic '+(Buffer.from(user.username+':'+user.password).toString('base64')))
