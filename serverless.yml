@@ -105,11 +105,11 @@ functions:
               - X-Amz-Security-Token
               - X-Amz-User-Agent
             allowCredentials: false
-  put:
-    handler: handler.put
+  set:
+    handler: handler.set
     events:
       - http:
-          path: put/{key}
+          path: set/{key}
           method: post
           request: 
             parameters: 

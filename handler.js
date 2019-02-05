@@ -132,7 +132,7 @@ module.exports.get = async (event, context) => {
   })
 }
 
-module.exports.put = async (event, context) => {
+module.exports.set = async (event, context) => {
   const authorizationHeader = event.headers.Authorization
   if (!authorizationHeader) {
     return returnPayload(400, { message: 'Unable to Authorize' })
