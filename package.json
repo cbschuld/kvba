@@ -1,0 +1,23 @@
+{
+  "name": "kvba",
+  "version": "1.0.0",
+  "description": "A serverless AWS lambda and api gateway enabled key/value store with Basic HTTP Authorization and weak obfuscated account creation.",
+  "main": "handler.js",
+  "dependencies": {
+    "aws-sdk": "^2.395.0",
+    "dynamodb": "^1.2.0",
+    "serverless-domain-manager": "^2.6.13",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.1",
+    "mocha": "^5.2.0",
+    "serverless-offline": "^4.2.1"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC"
+}

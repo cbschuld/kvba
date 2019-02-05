@@ -1,0 +1,127 @@
+service: kvba
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: us-west-2
+  environment:
+    DYNAMODB_DATASTORE_AUTH_TABLE: kvba-auth
+    DYNAMODB_DATASTORE_KVBA_TABLE: kvba
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_DATASTORE_AUTH_TABLE}"
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_DATASTORE_AUTH_TABLE}/index/*"
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_DATASTORE_KVBA_TABLE}"
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_DATASTORE_KVBA_TABLE}/index/*"
+plugins:
+  - serverless-domain-manager
+  - serverless-offline
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  region: us-west-2
+  domains:
+    prod: kvba
+    staging: staging-kvba
+    dev: dev-kvba
+  serverless-offline:
+    port: 4000
+    noEnvironment: false
+  customDomain:
+    basePath: ""
+    certificateName: "*"
+    domainName: ${self:custom.domains.${self:custom.stage}}
+    stage: "${self:custom.stage}"
+    createRoute53Record: true
+
+functions:
+  auth:
+    handler: handler.auth
+    events:
+      - http:
+          path: auth
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: false
+      - http:
+          path: auth
+          method: put
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: false
+  get:
+    handler: handler.get
+    events:
+      - http:
+          path: get/{key}
+          method: get
+          request: 
+            parameters: 
+              paths: 
+               key: true     
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: false
+  put:
+    handler: handler.put
+    events:
+      - http:
+          path: put/{key}
+          method: post
+          request: 
+            parameters: 
+              paths: 
+               key: true
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: false
