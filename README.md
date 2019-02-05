@@ -4,7 +4,7 @@
 ## Endpoints
 **/auth** via **POST** (for account creation and verification)
 
-**/put** via **POST** to add a value to the key/value store
+**/set** via **POST** to add a value to the key/value store
 
 **/get** via **GET** to retrieve a value from the key/value store
 
